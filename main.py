@@ -6,13 +6,10 @@ from telegram.ext.messagehandler import MessageHandler
 from telegram.ext.filters import Filters
 from telegram import (Update, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telebot import (TeleBot)
-import datetime
-import pygal
-from pygal.style import Style
+
 
 bot = TeleBot(keys.API_KEY)
 print("Bot started...")
-time = datetime.datetime.now()
 
 # variables to put into logs
 answer1 = ""
@@ -47,7 +44,7 @@ fullLog.write(sessionLog + '\n')
 fullLog.close()
 
 
-# flag@thisisthepin is the pin
+
 # function called when user types /start
 def start_command(update, context: CallbackContext):
     if update.message.chat.username is not None:
