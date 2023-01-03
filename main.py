@@ -1,332 +1,56 @@
-import Constants as keys
-from telegram.ext.updater import Updater
-from telegram.ext.callbackcontext import CallbackContext
-from telegram.ext.commandhandler import CommandHandler
-from telegram.ext.messagehandler import MessageHandler
-from telegram.ext.filters import Filters
-from telegram import (Update, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove)
-from telebot import (TeleBot)
+What is a paragraph?
+Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph. A paragraph is defined as “a group of sentences or a single sentence that forms a unit” (Lunsford and Connors 116). Length and appearance do not determine whether a section in a paper is a paragraph. For instance, in some styles of writing, particularly journalistic styles, a paragraph can be just one sentence long. Ultimately, a paragraph is a sentence or group of sentences that support one main idea. In this handout, we will refer to this as the “controlling idea,” because it controls what happens in the rest of the paragraph.
 
+How do I decide what to put in a paragraph?
+Before you can begin to determine what the composition of a particular paragraph will be, you must first decide on an argument and a working thesis statement for your paper. What is the most important idea that you are trying to convey to your reader? The information in each paragraph must be related to that idea. In other words, your paragraphs should remind your reader that there is a recurrent relationship between your thesis and the information in each paragraph. A working thesis functions like a seed from which your paper, and your ideas, will grow. The whole process is an organic one—a natural progression from a seed to a full-blown paper where there are direct, familial relationships between all of the ideas in the paper.
 
-bot = TeleBot(keys.API_KEY)
-print("Bot started...")
+The decision about what to put into your paragraphs begins with the germination of a seed of ideas; this “germination process” is better known as brainstorming. There are many techniques for brainstorming; whichever one you choose, this stage of paragraph development cannot be skipped. Building paragraphs can be like building a skyscraper: there must be a well-planned foundation that supports what you are building. Any cracks, inconsistencies, or other corruptions of the foundation can cause your whole paper to crumble.
 
-# variables to put into logs
-answer1 = ""
-answer2 = ""
-answer3 = ""
-answer4 = ""
-answer5 = ""
-HTX = ""
-trackA = 0
-trackB = 0
-trackC = 0
+So, let’s suppose that you have done some brainstorming to develop your thesis. What else should you keep in mind as you begin to create paragraphs? Every paragraph in a paper should be:
 
-# creation of the reply buttons that will be use in the reply markup
+Unified: All of the sentences in a single paragraph should be related to a single controlling idea (often expressed in the topic sentence of the paragraph).
+Clearly related to the thesis: The sentences should all refer to the central idea, or thesis, of the paper (Rosen and Behrens 119).
+Coherent: The sentences should be arranged in a logical manner and should follow a definite plan for development (Rosen and Behrens 119).
+Well-developed: Every idea discussed in the paragraph should be adequately explained and supported through evidence and details that work together to explain the paragraph’s controlling idea (Rosen and Behrens 119).
+How do I organize a paragraph?
+There are many different ways to organize a paragraph. The organization you choose will depend on the controlling idea of the paragraph. Below are a few possibilities for organization, with links to brief examples:
 
-qn1 = [[KeyboardButton("Enterprise Security Architecture")], [KeyboardButton("Source Code Analysis")],
-       [KeyboardButton("Cyber Threat Hunting & Intelligence")]]
-qn2 = [[KeyboardButton("Cryptography")], [KeyboardButton("Vulnerability Research")],
-       [KeyboardButton("Cyber Exercises")]]
-qn3 = [[KeyboardButton("DevSecOps")], [KeyboardButton("Vulnerability Assessment & Penetration Testing")],
-       [KeyboardButton("Digital Forensics")]]
-qn4 = [[KeyboardButton("Embedded & IoT System Security")], [KeyboardButton("Adversary Simulation")],
-       [KeyboardButton("Incident Response Management")]]
-qn5 = [[KeyboardButton("System Security Architecture")], [KeyboardButton("Exploit Development")],
-       [KeyboardButton("Malware Analysis")]]
+Narration: Tell a story. Go chronologically, from start to finish. (See an example.)
+Description: Provide specific details about what something looks, smells, tastes, sounds, or feels like. Organize spatially, in order of appearance, or by topic. (See an example.)
+Process: Explain how something works, step by step. Perhaps follow a sequence—first, second, third. (See an example.)
+Classification: Separate into groups or explain the various parts of a topic. (See an example.)
+Illustration: Give examples and explain how those examples support your point. (See an example in the 5-step process below.)
+Illustration paragraph: a 5-step example
+From the list above, let’s choose “illustration” as our rhetorical purpose. We’ll walk through a 5-step process for building a paragraph that illustrates a point in an argument. For each step there is an explanation and example. Our example paragraph will be about human misconceptions of piranhas.
 
-# Create a log file at start
-now = datetime.datetime.now()
-sessionLog = now.strftime("%d%m%Y_%H%M%S")
-print("[Debug] Creating " + sessionLog + " .txt in /logs/")
-fullLog = open("logs/session//" + sessionLog + ".txt", "w")
-fullLog.write(sessionLog + '\n')
-fullLog.close()
+Step 1. Decide on a controlling idea and create a topic sentence
+Paragraph development begins with the formulation of the controlling idea. This idea directs the paragraph’s development. Often, the controlling idea of a paragraph will appear in the form of a topic sentence. In some cases, you may need more than one sentence to express a paragraph’s controlling idea.
 
+Controlling idea and topic sentence — Despite the fact that piranhas are relatively harmless, many people continue to believe the pervasive myth that piranhas are dangerous to humans.
 
+Step 2. Elaborate on the controlling idea
+Paragraph development continues with an elaboration on the controlling idea, perhaps with an explanation, implication, or statement about significance. Our example offers a possible explanation for the pervasiveness of the myth.
 
-# function called when user types /start
-def start_command(update, context: CallbackContext):
-    if update.message.chat.username is not None:
-        username = update.message.chat.username.replace(" ", "")  # remove spaces
-        # logFile = username + ".txt" + username.encode('utf-8') causing error currently (caused error can only
-        # concatenate str (not "bytes") to str) DEBUG
-        print("[Debug] Creating " + username + ".txt" + " in /logs directory")
+Elaboration — This impression of piranhas is exacerbated by their mischaracterization in popular media.
 
-        with open("logs//" + username + ".txt", "w", encoding='utf-8') as f:
-            current_time = now.strftime("%H:%M:%S")
-            f.write(str(current_time) + '\n')
-        question1(update, context)
-    else:
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="Your username is not detected. Please set a username before continuing.")
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="1. Click on ≡ (Top Left Corner) \n2. Click on settings \n3. Click on username "
-                                      "(under Account) \n4. Set a new username \n5. Click on /start to begin")
+Step 3. Give an example (or multiple examples)
+Paragraph development progresses with an example (or more) that illustrates the claims made in the previous sentences.
 
+Example — For example, the promotional poster for the 1978 horror film Piranha features an oversized piranha poised to bite the leg of an unsuspecting woman.
 
-# functions for question 1 - 5
+Step 4. Explain the example(s)
+The next movement in paragraph development is an explanation of each example and its relevance to the topic sentence. The explanation should demonstrate the value of the example as evidence to support the major claim, or focus, in your paragraph.
 
-def question1(update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="The next few questions will help you discover the HTX cybersecurity competency "
-                                  "framework domain you are most interested in.")
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Q1. Which topic is the most interesting to you?",
-                             reply_markup=ReplyKeyboardMarkup(qn1))
+Continue the pattern of giving examples and explaining them until all points/examples that the writer deems necessary have been made and explained. NONE of your examples should be left unexplained. You might be able to explain the relationship between the example and the topic sentence in the same sentence which introduced the example. More often, however, you will need to explain that relationship in a separate sentence.
 
+Explanation for example — Such a terrifying representation easily captures the imagination and promotes unnecessary fear.
 
-def question2(update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Q2. Select the topic that is most interesting to you.",
-                             reply_markup=ReplyKeyboardMarkup(qn2))
+Notice that the example and explanation steps of this 5-step process (steps 3 and 4) can be repeated as needed. The idea is that you continue to use this pattern until you have completely developed the main idea of the paragraph.
 
+Step 5. Complete the paragraph’s idea or transition into the next paragraph
+The final movement in paragraph development involves tying up the loose ends of the paragraph. At this point, you can remind your reader about the relevance of the information to the larger paper, or you can make a concluding point for this example. You might, however, simply transition to the next paragraph.
 
-def question3(update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Q3. Pick the topic that interests you the most.",
-                             reply_markup=ReplyKeyboardMarkup(qn3))
+Sentences for completing a paragraph — While the trope of the man-eating piranhas lends excitement to the adventure stories, it bears little resemblance to the real-life piranha. By paying more attention to fact than fiction, humans may finally be able to let go of this inaccurate belief.
 
-
-def question4(update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Q4. Which topic interests you the most?",
-                             reply_markup=ReplyKeyboardMarkup(qn4))
-
-
-def question5(update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Q5. Choose the topic that interests you the most?",
-                             reply_markup=ReplyKeyboardMarkup(qn5))
-
-
-# function for putting results in a graph and sending graph to user
-def summary(update, context):
-    username = update.message.chat.username.replace(" ", "")
-    file = open("logs//" + username + ".txt", "r")
-    data = file.read()
-    # Count for answers in the txt file
-    A = data.count("A")
-    B = data.count("B")
-    C = data.count("C")
-    count = A + B + C
-    # if user answer all 5 questions
-    if count == 5:
-        tracks = {'trackA': A, 'trackB': B, 'trackC': C}
-
-        custom_style = Style(
-            legend_font_size=25,
-            title_font_size=35,
-            value_font_size=35,
-            colors=('#0F52BA', '#330066', '#87CEEB'),
-            value_colors=('#FFFFFF', '#FFFFFF', '#000000')
-        )
-        # Creation of Bar Graph
-        bar_chart = pygal.Pie(title=username, style=custom_style, print_values=True,
-                              legend_at_bottom=True, legend_box_size=40)
-        bar_chart.add('Systems & Development', tracks['trackA'])
-        bar_chart.add('Resilience', tracks['trackB'])
-        bar_chart.add('Operations', tracks['trackC'])
-
-        # Render File to PNG
-        bar_chart.render_to_png('logs//' + username + '.png')
-        file = open('logs//' + username + '.png', "rb")
-
-        # Send message and Image
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Here are your results!")
-        context.bot.send_photo(chat_id=update.effective_chat.id, photo=file,
-                               reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="Please click /start if you like to redo the survey.")
-
-        # to prevent sending faulty graphs
-    elif count > 5:
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text="You have answered too many times \nPlease click on /start to redo.",
-                                 reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
-        # reset the file
-        with open("logs//" + username + ".txt", "w", encoding='utf-8') as f:
-            current_time = now.strftime("%H:%M:%S")
-            f.write(str(current_time) + '\n')
-
-
-# function called when user type /help
-def help_command(update):
-    update.message.reply_text(
-        "This bot would help you find your interest in Cybersecurity! Just click /start to start your interest finder "
-        "and remember to say hi to the bot. "
-        "\nThere is an option beside the textbox to show the buttons that you would need to reply to the chatbot.")
-
-
-# every reply would go through this function
-# if answered, option chose would be added into the username.txt file
-def handle_message(update: Update, context: CallbackContext):
-    global HTX, answer1, answer2, answer3, answer4, answer5
-    # Question 0 ask if user is a HTX staff
-    if "Yes" in update.message.text:
-        HTX = "HTX Staff"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("HTX Staff\n")
-            f.close()
-        question1(update, context)
-
-    elif "No" in update.message.text:
-        HTX = "Visitor"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Visitor\n")
-            f.close()
-        question1(update, context)
-
-        # Question 1
-    if "Enterprise Security Architecture" in update.message.text:
-        answer1 = "Enterprise Security Architecture"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q1. A\n")
-            f.close()
-        question2(update, context)
-
-    elif "Source Code Analysis" in update.message.text:
-        answer1 = "Source Code Analysis"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q1. B\n")
-            f.close()
-        question2(update, context)
-
-    elif "Cyber Threat Hunting & Intelligence" in update.message.text:
-        answer1 = "Cyber Threat Hunting & Intelligence"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q1. C\n")
-            f.close()
-        question2(update, context)
-
-    # Question 2
-    if "Cryptography" in update.message.text:
-        answer2 = "Cryptography"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q2. A\n")
-            f.close()
-        question3(update, context)
-    elif "Vulnerability Research" in update.message.text:
-        answer2 = "Vulnerability Research"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q2. B\n")
-            f.close()
-        question3(update, context)
-    elif "Cyber Exercises" in update.message.text:
-        answer2 = "Cyber Exercises"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q2. C\n")
-            f.close()
-        question3(update, context)
-
-    # Question 3
-    if "DevSecOps" in update.message.text:
-        answer3 = "DevSecOps"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q3. A\n")
-            f.close()
-        question4(update, context)
-    elif "Vulnerability Assessment & Penetration Testing" in update.message.text:
-        answer3 = "Vulnerability Assessment & Penetration Testing"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q3. B\n")
-            f.close()
-        question4(update, context)
-    elif "Digital Forensics" in update.message.text:
-        answer3 = "Digital Forensics"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q3. C\n")
-            f.close()
-        question4(update, context)
-
-    # Question 4
-    if "Embedded & IoT System Security" in update.message.text:
-        answer4 = "Embedded & IoT System Security"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q4. A\n")
-            f.close()
-        question5(update, context)
-
-    elif "Adversary Simulation" in update.message.text:
-        answer4 = "Adversary Simulation"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q4. B\n")
-            f.close()
-        question5(update, context)
-
-    elif "Incident Response Management" in update.message.text:
-        answer4 = "Incident Response Management"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q4. C\n")
-            f.close()
-        question5(update, context)
-
-    # Question 5
-    if "System Security Architecture" in update.message.text:
-        answer5 = "System Security Architecture"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q5. A\n")
-            f.close()
-
-    elif "Exploit Development" in update.message.text:
-        answer5 = "Exploit Development"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q5. B\n")
-            f.close()
-
-    elif "Malware Analysis" in update.message.text:
-        answer5 = "Malware Analysis"
-        username = update.message.chat.username.replace(" ", "")
-        with open('logs//' + username + ".txt", 'a', encoding='utf-8') as f:
-            f.write("Q5. C\n")
-            f.close()
-
-    # DEBUG
-    print("[DEBUG] ", answer1, ", ", answer2, ", ", answer3, ", ", answer4, ", ", answer5)
-
-    # Only write to file & call results()
-    if answer1 and answer2 and answer3 and answer4 and answer5:
-        f1 = open("logs/session//" + sessionLog + ".txt", "a")
-        f1.write(username + "," + HTX + "," + answer1 + "," + answer2 + "," + answer3 + "," + answer4 + "," + answer5 +
-                 "\n")
-        f1.close()
-
-        summary(update, context)
-
-
-# error handler
-def error(update, context):
-    print(f"Update {update} caused error {context.error}")
-
-
-# main
-def main():
-    updater = Updater(keys.API_KEY, use_context=True)
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler("start", start_command))
-    dp.add_handler(CommandHandler("help", help_command))
-    dp.add_handler(MessageHandler(Filters.text, handle_message))
-
-    dp.add_error_handler(error)
-
-    updater.start_polling()
-    updater.idle()
-
-
-main()
+Finished paragraph
+Despite the fact that piranhas are relatively harmless, many people continue to believe the pervasive myth that piranhas are dangerous to humans. This impression of piranhas is exacerbated by their mischaracterization in popular media. For example, the promotional poster for the 1978 horror film Piranha features an oversized piranha poised to bite the leg of an unsuspecting woman. Such a terrifying representation easily captures the imagination and promotes unnecessary fear. While the trope of the man-eating piranhas lends excitement to the adventure stories, it bears little resemblance to the real-life piranha. By paying more attention to fact than fiction, humans may finally be able to let go of this inaccurate belief.
